@@ -1,7 +1,9 @@
 package EventManagement.entities;
 
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Show {
     private String id;
@@ -10,9 +12,9 @@ public class Show {
     private String eventId;
     private Instant startTime;
     private Instant endTime;
-    private List<String> bookedSeatNumbers;
+    private Set<String> bookedSeatNumbers = new HashSet<>();
 
-    public Show(String id, String venueId, String hallId, String eventId, Instant startTime, Instant endTime, List<String> bookedSeatNumbers) {
+    public Show(String id, String venueId, String hallId, String eventId, Instant startTime, Instant endTime, Set<String> bookedSeatNumbers) {
         this.id = id;
         this.venueId = venueId;
         this.hallId = hallId;
@@ -70,11 +72,11 @@ public class Show {
         this.endTime = endTime;
     }
 
-    public List<String> getBookedSeatNumbers() {
+    public Set<String> getBookedSeatNumbers() {
         return bookedSeatNumbers;
     }
 
-    public void setBookedSeatNumbers(List<String> bookedSeatNumbers) {
+    public void setBookedSeatNumbers(Set<String> bookedSeatNumbers) {
         this.bookedSeatNumbers = bookedSeatNumbers;
     }
 

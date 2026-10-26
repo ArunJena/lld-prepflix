@@ -58,7 +58,7 @@ public class EventController {
             }
         }
 
-        Show show = new Show(eventId + hallId, venueId, hallId, eventId, startTime, endTime, new ArrayList<>());
+        Show show = new Show(eventId + hallId, venueId, hallId, eventId, startTime, endTime, new HashSet<>());
         inMemoryShowRepositories.save(show);
         System.out.println("Created show with showId: "+show.getId());
 
@@ -81,7 +81,7 @@ public class EventController {
         //get available seats
         Show show = inMemoryShowRepositories.findById(showId).orElseThrow();
         List<String> availableSeatNumbers = new ArrayList<>();
-        List<String> bookedSeatNumbers = show.getBookedSeatNumbers();
+        Set<String> bookedSeatNumbers = show.getBookedSeatNumbers();
         for(int i=0; i<26*9; i++){
             if(!bookedSeatNumbers.contains(i+"")) availableSeatNumbers.add(i+"");
         }
