@@ -6,13 +6,13 @@ public class Ticket {
     String id;
     String showId;
     String userId;
-    List<String> seatIds;
+    List<String> selectedSeatNumbers;
 
-    public Ticket(String id, String showId, String userId, List<String> seatIds) {
+    public Ticket(String id, String showId, String userId, List<String> selectedSeatNumbers) {
         this.id = id;
         this.showId = showId;
         this.userId = userId;
-        this.seatIds = seatIds;
+        this.selectedSeatNumbers = selectedSeatNumbers;
     }
 
     public String getId() {
@@ -39,11 +39,11 @@ public class Ticket {
         this.userId = userId;
     }
 
-    public List<String> getSeatIds() {
-        return seatIds;
+    public List<String> getSelectedSeatNumbers() {
+        return selectedSeatNumbers;
     }
 
-    public void setSeatIds(List<String> seatIds) {
-        this.seatIds = seatIds;
+    public void setSelectedSeatNumbers(List<String> selectedSeatNumbers) {
+        this.selectedSeatNumbers = selectedSeatNumbers;
     }
 }

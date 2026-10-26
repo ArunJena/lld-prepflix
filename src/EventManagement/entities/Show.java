@@ -10,16 +10,16 @@ public class Show {
     private String eventId;
     private Instant startTime;
     private Instant endTime;
-    private List<Seat> bookedSeats;
+    private List<String> bookedSeatNumbers;
 
-    public Show(String id, String venueId, String hallId, String eventId, Instant startTime, Instant endTime, List<Seat> bookedSeats) {
+    public Show(String id, String venueId, String hallId, String eventId, Instant startTime, Instant endTime, List<String> bookedSeatNumbers) {
         this.id = id;
         this.venueId = venueId;
         this.hallId = hallId;
         this.eventId = eventId;
         this.startTime = startTime;
         this.endTime = endTime;
-        this.bookedSeats = bookedSeats;
+        this.bookedSeatNumbers = bookedSeatNumbers;
     }
 
     public String getId() {
@@ -70,12 +70,12 @@ public class Show {
         this.endTime = endTime;
     }
 
-    public List<Seat> getBookedSeats() {
-        return bookedSeats;
+    public List<String> getBookedSeatNumbers() {
+        return bookedSeatNumbers;
     }
 
-    public void setBookedSeats(List<Seat> bookedSeats) {
-        this.bookedSeats = bookedSeats;
+    public void setBookedSeatNumbers(List<String> bookedSeatNumbers) {
+        this.bookedSeatNumbers = bookedSeatNumbers;
     }
 
     void reserveSeats(){

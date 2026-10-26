@@ -27,6 +27,6 @@ void main() {
 //    System.out.println("Parking fee:"+ amount);
 
     //Event Module
-//    EventModuleDemo eventModuleDemo = new EventModuleDemo();
-//    eventModuleDemo.run();
+    EventModuleDemo eventModuleDemo = new EventModuleDemo();
+    eventModuleDemo.run();
 }

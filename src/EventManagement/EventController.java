@@ -58,7 +58,7 @@ public class EventController {
             }
         }
 
-        Show show = new Show(eventId + hallId, venueId, hallId, eventId, startTime, endTime, new ArrayList<>(hallIdToHallHM.get(hallId).getSeats()));
+        Show show = new Show(eventId + hallId, venueId, hallId, eventId, startTime, endTime, new ArrayList<>());
         showIdToShowHM.put(show.getId(), show);
         hallIdToShowIdHM
                 .computeIfAbsent(hallId, k -> new ArrayList<>())
@@ -83,27 +83,41 @@ public class EventController {
     public Ticket reserveSeats(String showId, User user){
         //get available seats
         Show show = showIdToShowHM.get(showId);
-        List<String> availableSeatIds = new ArrayList<>();
-        for(Seat seat: show.getBookedSeats()){
-            if(!seat.getIsBooked()) availableSeatIds.add(seat.getId());
+        List<String> availableSeatNumbers = new ArrayList<>();
+        List<String> bookedSeatNumbers = show.getBookedSeatNumbers();
+        for(int i=0; i<26*9; i++){
+            if(!bookedSeatNumbers.contains(i+"")) availableSeatNumbers.add(i+"");
         }
 
-        //let user select seats
-        System.out.println("Enter any of the available seats separated by spaces: "+availableSeatIds);
+
+        //let user choose seat numbers and validate
         Scanner sc = new Scanner(System.in);
-        String input = sc.nextLine();
-        ArrayList<String> selectedSeatIds = new ArrayList<>(
-                Arrays.asList(input.trim().split("\\s+"))
-        );
+        ArrayList<String> selectedSeatNumbers = new ArrayList<>();
+        while(true){
+            System.out.println("Enter any of the available seats separated by spaces: "+availableSeatNumbers);
+            String input = sc.nextLine();
+            selectedSeatNumbers = new ArrayList<>(
+                    Arrays.asList(input.trim().split("\\s+"))
+            );
 
-        //TODO: validate selectedSeats, if any seats is booked throw error
-
-        //else book seats
-        for(String seatId: selectedSeatIds){
-            Seat seat = seatIdToSeatHM.get(seatId);
-            seat.setIsBooked(true);
+            boolean isInvalidSeatSelected = false;
+            for(String selectedSeatNumber: selectedSeatNumbers){
+                if(bookedSeatNumbers.contains(selectedSeatNumber)){
+                    System.out.println("Invalid seat numbers");
+                    isInvalidSeatSelected = true;
+                    break;
+                }
+            }
+            if(isInvalidSeatSelected) continue;
+            else break;
         }
-        Ticket ticket = new Ticket(UUID.randomUUID().toString(), showId, user.getId(), selectedSeatIds);
+
+
+        //book seats
+        for(String selectedSeatNumber: selectedSeatNumbers){
+            show.getBookedSeatNumbers().add(selectedSeatNumber);
+        }
+        Ticket ticket = new Ticket(UUID.randomUUID().toString(), showId, user.getId(), selectedSeatNumbers);
         System.out.println("Ticket booked with ticketId: "+ ticket.getId());
         return ticket;
     }

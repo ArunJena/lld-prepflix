@@ -5,14 +5,12 @@ public class Seat {
     private String seatNumber;
     private String hallId;
     private String VenueId;
-    private boolean isBooked;
 
     public Seat(String id, String seatNumber, String hallId, String venueId, boolean isBooked) {
         this.id = id;
         this.seatNumber = seatNumber;
         this.hallId = hallId;
         VenueId = venueId;
-        this.isBooked = isBooked;
     }
 
     public String getId() {
@@ -45,13 +43,5 @@ public class Seat {
 
     public void setVenueId(String venueId) {
         VenueId = venueId;
-    }
-
-    public boolean getIsBooked() {
-        return isBooked;
-    }
-
-    public void setIsBooked(boolean isBooked) {
-        this.isBooked = isBooked;
     }
 }
