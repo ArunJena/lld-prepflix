@@ -1,16 +1,18 @@
 package EventManagement;
 
 import EventManagement.entities.*;
+import EventManagement.repositories.InMemoryShowRepositories;
 
 import java.time.Instant;
 import java.util.*;
 
 public class EventController {
-    HashMap<String, Show> showIdToShowHM = new HashMap<>();
     HashMap<String, Venue> venueIdToVenueHM = new HashMap<>();
     HashMap<String, Hall> hallIdToHallHM = new HashMap<>();
-    HashMap<String, List<String>> hallIdToShowIdHM = new HashMap<>();
     HashMap<String, Seat> seatIdToSeatHM = new HashMap<>();
+
+    InMemoryShowRepositories inMemoryShowRepositories = new InMemoryShowRepositories();
+    //this can be done for above hashmaps
 
     public String createVenue(int numberOfHalls, User user){
         //Assuming all the halls are same, have 1A-1Z, till 9A-9Z : 26x9 seats
@@ -48,21 +50,16 @@ public class EventController {
         }
 
         //if hall is occupied in that duration return false
-        List<String> showIdsInGivenHall = hallIdToShowIdHM.get(hallId);
-        if(showIdsInGivenHall == null) showIdsInGivenHall = new ArrayList<>();
-        for(String showId: showIdsInGivenHall){
-            Show show = showIdToShowHM.get(showId);
+        List<Show> showsInGivenHall = inMemoryShowRepositories.findByHallId(hallId);
+        for(Show show: showsInGivenHall){
             if(isOverlap(startTime, endTime, show.getStartTime(), show.getEndTime())){
-                System.out.println("Cannot creat the show, overlapping with showId: "+ showId);
+                System.out.println("Cannot creat the show, overlapping with showId: "+ show.getId());
                 return "false";
             }
         }
 
         Show show = new Show(eventId + hallId, venueId, hallId, eventId, startTime, endTime, new ArrayList<>());
-        showIdToShowHM.put(show.getId(), show);
-        hallIdToShowIdHM
-                .computeIfAbsent(hallId, k -> new ArrayList<>())
-                .add(show.getId());
+        inMemoryShowRepositories.save(show);
         System.out.println("Created show with showId: "+show.getId());
 
         return show.getId();
@@ -73,7 +70,7 @@ public class EventController {
     }
 
     public List<Show> listShows(String eventId, String venueId, Instant startTime){
-        return showIdToShowHM.values().stream()
+        return inMemoryShowRepositories.findAll().stream()
                 .filter(s -> eventId==null || eventId.equals(s.getEventId()))
                 .filter(s -> venueId==null || venueId.equals(s.getVenueId()))
                 .filter(s -> startTime==null || startTime.equals(s.getStartTime()))
@@ -82,7 +79,7 @@ public class EventController {
 
     public Ticket reserveSeats(String showId, User user){
         //get available seats
-        Show show = showIdToShowHM.get(showId);
+        Show show = inMemoryShowRepositories.findById(showId).orElseThrow();
         List<String> availableSeatNumbers = new ArrayList<>();
         List<String> bookedSeatNumbers = show.getBookedSeatNumbers();
         for(int i=0; i<26*9; i++){
